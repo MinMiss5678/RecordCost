@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordCost", "RecordCost\RecordCost.csproj", "{7ED372B2-FAEC-4897-8E95-C4B177DC6FA2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7ED372B2-FAEC-4897-8E95-C4B177DC6FA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ED372B2-FAEC-4897-8E95-C4B177DC6FA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ED372B2-FAEC-4897-8E95-C4B177DC6FA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ED372B2-FAEC-4897-8E95-C4B177DC6FA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AC79E014-5F28-4DBE-BCF7-6CA9CB535AC8}
+	EndGlobalSection
+EndGlobal
