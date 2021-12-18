@@ -31,3 +31,5 @@ C:\Users\zxc30\Documents\GitHub\RecordCost\RecordCost\obj\Debug\RecordCost.Prope
 C:\Users\zxc30\Documents\GitHub\RecordCost\RecordCost\obj\Debug\RecordCost.csproj.GenerateResource.cache
 C:\Users\zxc30\Documents\GitHub\RecordCost\RecordCost\obj\Debug\RecordCost.csproj.CoreCompileInputs.cache
 C:\Users\zxc30\Documents\GitHub\RecordCost\RecordCost\obj\Debug\RecordCost.csproj.CopyComplete
+C:\Users\jerem\source\repos\RecordCost\RecordCost\bin\Debug\System.Data.SqlClient.dll
+C:\Users\jerem\source\repos\RecordCost\RecordCost\bin\Debug\System.Data.SqlClient.xml

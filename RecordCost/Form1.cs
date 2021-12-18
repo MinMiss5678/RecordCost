@@ -110,7 +110,7 @@ namespace RecordCost
             this.label1.Text = DecodeQrCode((Bitmap)this.pictureBox1.Image);
         }
 
-        private void NewButton_Click(object sender, EventArgs e)
+        private void EmptyButton_Click(object sender, EventArgs e)
         {
             if (idTextBox.Text != "")
             {
@@ -193,6 +193,8 @@ namespace RecordCost
         {
             int id;
             int.TryParse(idTextBox.Text, out id);
+
+
 
             if (id > 0)
             {
@@ -312,6 +314,7 @@ namespace RecordCost
                     int rows = command.ExecuteNonQuery();
                     dataInDataGridView();
                     connect.Close();
+                    JumpRowFromID(id.ToString());
                     MessageBox.Show($"{rows}筆資料修改成功");
                 }
 
@@ -595,8 +598,6 @@ namespace RecordCost
 
         private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-
-
             var temp = dataGridView1.Rows[e.RowIndex].Cells;
             idTextBox.Text = $"{temp[0].Value}";
             costDateTimePicker.Value = Convert.ToDateTime(temp[1].Value);
@@ -604,11 +605,6 @@ namespace RecordCost
             itemsTextBox.Text = $"{temp[3].Value}";
             countTextBox.Text = $"{temp[4].Value}";
             priceTextBox.Text = $"{temp[5].Value}";
-        }
-
-        private void dataGridView1_RowLeave(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

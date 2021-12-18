@@ -42,7 +42,7 @@ namespace RecordCost
             this.itemsTextBox = new System.Windows.Forms.TextBox();
             this.countTextBox = new System.Windows.Forms.TextBox();
             this.priceTextBox = new System.Windows.Forms.TextBox();
-            this.NewButton = new System.Windows.Forms.Button();
+            this.EmptyButton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.costBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.startDateTimePicker = new System.Windows.Forms.DateTimePicker();
@@ -97,7 +97,7 @@ namespace RecordCost
             this.label1.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label1.Location = new System.Drawing.Point(470, 175);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 16);
+            this.label1.Size = new System.Drawing.Size(46, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
             // 
@@ -181,16 +181,16 @@ namespace RecordCost
             this.priceTextBox.Size = new System.Drawing.Size(173, 40);
             this.priceTextBox.TabIndex = 11;
             // 
-            // NewButton
+            // EmptyButton
             // 
-            this.NewButton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.NewButton.Location = new System.Drawing.Point(42, 449);
-            this.NewButton.Name = "NewButton";
-            this.NewButton.Size = new System.Drawing.Size(130, 39);
-            this.NewButton.TabIndex = 12;
-            this.NewButton.Text = "新增資料";
-            this.NewButton.UseVisualStyleBackColor = true;
-            this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
+            this.EmptyButton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.EmptyButton.Location = new System.Drawing.Point(42, 449);
+            this.EmptyButton.Name = "EmptyButton";
+            this.EmptyButton.Size = new System.Drawing.Size(130, 39);
+            this.EmptyButton.TabIndex = 12;
+            this.EmptyButton.Text = "清空欄位";
+            this.EmptyButton.UseVisualStyleBackColor = true;
+            this.EmptyButton.Click += new System.EventHandler(this.EmptyButton_Click);
             // 
             // DeleteButton
             // 
@@ -242,7 +242,6 @@ namespace RecordCost
             this.dataGridView1.Size = new System.Drawing.Size(660, 202);
             this.dataGridView1.TabIndex = 17;
             this.dataGridView1.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
-            this.dataGridView1.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowLeave);
             // 
             // endDateTimePicker
             // 
@@ -392,7 +391,7 @@ namespace RecordCost
             this.lastLotteryLabel.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lastLotteryLabel.Location = new System.Drawing.Point(133, 36);
             this.lastLotteryLabel.Name = "lastLotteryLabel";
-            this.lastLotteryLabel.Size = new System.Drawing.Size(28, 16);
+            this.lastLotteryLabel.Size = new System.Drawing.Size(29, 16);
             this.lastLotteryLabel.TabIndex = 33;
             this.lastLotteryLabel.Text = "last";
             // 
@@ -402,7 +401,7 @@ namespace RecordCost
             this.thisLotteryLabel.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.thisLotteryLabel.Location = new System.Drawing.Point(33, 36);
             this.thisLotteryLabel.Name = "thisLotteryLabel";
-            this.thisLotteryLabel.Size = new System.Drawing.Size(29, 16);
+            this.thisLotteryLabel.Size = new System.Drawing.Size(30, 16);
             this.thisLotteryLabel.TabIndex = 32;
             this.thisLotteryLabel.Text = "this";
             // 
@@ -440,7 +439,7 @@ namespace RecordCost
             this.Controls.Add(this.SearchButton);
             this.Controls.Add(this.startDateTimePicker);
             this.Controls.Add(this.DeleteButton);
-            this.Controls.Add(this.NewButton);
+            this.Controls.Add(this.EmptyButton);
             this.Controls.Add(this.priceTextBox);
             this.Controls.Add(this.countTextBox);
             this.Controls.Add(this.itemsTextBox);
@@ -480,7 +479,7 @@ namespace RecordCost
         private System.Windows.Forms.TextBox itemsTextBox;
         private System.Windows.Forms.TextBox countTextBox;
         private System.Windows.Forms.TextBox priceTextBox;
-        private System.Windows.Forms.Button NewButton;
+        private System.Windows.Forms.Button EmptyButton;
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.BindingSource costBindingSource;
         private System.Windows.Forms.DateTimePicker startDateTimePicker;
