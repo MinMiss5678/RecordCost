@@ -24,7 +24,7 @@ namespace RecordCost
         public Form1()
         {
             InitializeComponent();
-            this.pictureBox1.Image = Image.FromFile(@"C:\Users\jerem\Downloads\qrcode_dotblogs.com.tw.png");
+            //this.pictureBox1.Image = Image.FromFile(@"C:\Users\jerem\Downloads\qrcode_dotblogs.com.tw.png");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -141,25 +141,29 @@ namespace RecordCost
                 dataInDataGridView();
                 connect.Close();
 
-                int rowIndex;
-
-                foreach (DataGridViewRow row in dataGridView1.Rows)
-                {
-                    if (row.Cells[0].Value.ToString().Contains(id))
-                    {
-                        rowIndex = row.Index;
-                        //dataGridView1.ClearSelection();
-                        row.Selected = true;
-                        dataGridView1.FirstDisplayedScrollingRowIndex = rowIndex;
-                        dataGridView1.Focus();
-                        break;
-                    }
-                }
+                JumpRowFromID(id);
             }
 
             else
             {
                 MessageBox.Show("請輸入發票號碼或品項");
+            }
+        }
+
+        private void JumpRowFromID(string id)
+        {
+            System.Collections.IList list = (System.Collections.IList)dataGridView1.Rows;
+            for (int i = 0; i < list.Count; i++)
+            {
+                DataGridViewRow row = (DataGridViewRow)list[i];
+                if (row.Cells[0].Value.ToString() == id)
+                {
+                    row.Selected = true;
+                    dataGridView1.FirstDisplayedScrollingRowIndex = row.Index;
+                    dataGridView1.Focus();
+                    dataGridView1_RowEnter(this, new DataGridViewCellEventArgs(0, i));
+                    break;
+                }
             }
         }
 
@@ -591,41 +595,20 @@ namespace RecordCost
 
         private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || e.RowIndex == dataGridView1.Rows.Count - 1)
-            {
-                if (idTextBox.Text != "")
-                {
-                    idTextBox.Text = "";
-                    numberTextBox.Text = "";
-                    itemsTextBox.Text = "";
-                    countTextBox.Text = "";
-                    priceTextBox.Text = "";
-                }
-                return;
-            }
 
-            int intSelectID = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
 
-            connect = new SqlConnection(myCostConnectionString);
-            connect.Open();
-            string strSQL = "select * from Cost where id = @searchID";
-            SqlCommand cmd = new SqlCommand(strSQL, connect);
-            cmd.Parameters.AddWithValue("@searchID", intSelectID);
+            var temp = dataGridView1.Rows[e.RowIndex].Cells;
+            idTextBox.Text = $"{temp[0].Value}";
+            costDateTimePicker.Value = Convert.ToDateTime(temp[1].Value);
+            numberTextBox.Text = $"{temp[2].Value}";
+            itemsTextBox.Text = $"{temp[3].Value}";
+            countTextBox.Text = $"{temp[4].Value}";
+            priceTextBox.Text = $"{temp[5].Value}";
+        }
 
-            SqlDataReader reader = cmd.ExecuteReader();
+        private void dataGridView1_RowLeave(object sender, DataGridViewCellEventArgs e)
+        {
 
-            if (reader.Read())
-            {
-                idTextBox.Text = $"{reader["id"]}";
-                costDateTimePicker.Value = Convert.ToDateTime(reader["costDate"]);
-                numberTextBox.Text = $"{reader["number"]}";
-                itemsTextBox.Text = $"{reader["items"]}";
-                countTextBox.Text = $"{reader["count"]}";
-                priceTextBox.Text = $"{reader["price"]}";
-            }
-
-            reader.Close();
-            connect.Close();
         }
     }
 }

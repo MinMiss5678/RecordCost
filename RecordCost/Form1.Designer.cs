@@ -97,7 +97,7 @@ namespace RecordCost
             this.label1.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label1.Location = new System.Drawing.Point(470, 175);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 16);
+            this.label1.Size = new System.Drawing.Size(45, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
             // 
@@ -234,6 +234,7 @@ namespace RecordCost
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(608, 12);
             this.dataGridView1.Name = "dataGridView1";
@@ -241,6 +242,7 @@ namespace RecordCost
             this.dataGridView1.Size = new System.Drawing.Size(660, 202);
             this.dataGridView1.TabIndex = 17;
             this.dataGridView1.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
+            this.dataGridView1.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowLeave);
             // 
             // endDateTimePicker
             // 
@@ -390,7 +392,7 @@ namespace RecordCost
             this.lastLotteryLabel.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lastLotteryLabel.Location = new System.Drawing.Point(133, 36);
             this.lastLotteryLabel.Name = "lastLotteryLabel";
-            this.lastLotteryLabel.Size = new System.Drawing.Size(29, 16);
+            this.lastLotteryLabel.Size = new System.Drawing.Size(28, 16);
             this.lastLotteryLabel.TabIndex = 33;
             this.lastLotteryLabel.Text = "last";
             // 
@@ -400,7 +402,7 @@ namespace RecordCost
             this.thisLotteryLabel.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.thisLotteryLabel.Location = new System.Drawing.Point(33, 36);
             this.thisLotteryLabel.Name = "thisLotteryLabel";
-            this.thisLotteryLabel.Size = new System.Drawing.Size(30, 16);
+            this.thisLotteryLabel.Size = new System.Drawing.Size(29, 16);
             this.thisLotteryLabel.TabIndex = 32;
             this.thisLotteryLabel.Text = "this";
             // 
