@@ -13,7 +13,7 @@ using ZXing;
 using ZXing.Common;
 using ZXing.Rendering;
 using System.Diagnostics;
-
+using System.Data.SqlTypes;
 namespace RecordCost
 {
     public partial class Form1 : Form
@@ -34,10 +34,22 @@ namespace RecordCost
             scsb.InitialCatalog = "myCost";
             scsb.IntegratedSecurity = true;
             myCostConnectionString = scsb.ToString();
-
             connect = new SqlConnection(myCostConnectionString);
             connect.Open();
+
+            if (DateTime.Now.Month % 2 == 0)
+            {
+                thisLotteryLabel.Text = $"{DateTime.Now.AddMonths(-3).Month}-{DateTime.Now.AddMonths(-2).Month}";
+                lastLotteryLabel.Text = $"{DateTime.Now.AddMonths(-5).Month}-{DateTime.Now.AddMonths(-4).Month}";
+            }
+
+            else
+            {
+                thisLotteryLabel.Text = $"{DateTime.Now.AddMonths(-2).Month}-{DateTime.Now.AddMonths(-1).Month}";
+                lastLotteryLabel.Text = $"{DateTime.Now.AddMonths(-4).Month}-{DateTime.Now.AddMonths(-3).Month}";
+            }
             dataInDataGridView();
+            costDateTimePicker.Value = DateTime.Now;
         }
 
         private string imagePath = "";
@@ -100,16 +112,23 @@ namespace RecordCost
 
         private void NewButton_Click(object sender, EventArgs e)
         {
+            if (idTextBox.Text != "")
+            {
+                idTextBox.Text = "";
+                numberTextBox.Text = "";
+                itemsTextBox.Text = "";
+                countTextBox.Text = "";
+                priceTextBox.Text = "";
+            }
+        }
+
+        private void KeepButton_Click(object sender, EventArgs e)
+        {
             if (numberTextBox.Text != "" || itemsTextBox.Text != "")
             {
-                int count;
-                int price;
-                int.TryParse(countTextBox.Text, out count);
-                int.TryParse(priceTextBox.Text, out price);
-
                 connect = new SqlConnection(myCostConnectionString);
                 connect.Open();
-                string newSQL = "insert into Cost values (@newDate, @newNumber, @newItems, @newCount, @newPrice);";
+                string newSQL = "insert into Cost output inserted.id values (@newDate, @newNumber, @newItems, @newCount, @newPrice);";
                 SqlCommand command = new SqlCommand(newSQL, connect);
                 command.Parameters.AddWithValue("@newDate", costDateTimePicker.Value);
                 command.Parameters.AddWithValue("@newNumber", numberTextBox.Text);
@@ -117,11 +136,25 @@ namespace RecordCost
                 command.Parameters.AddWithValue("@newCount", countTextBox.Text);
                 command.Parameters.AddWithValue("@newPrice", priceTextBox.Text);
 
-                int rows = command.ExecuteNonQuery();
+                string id = command.ExecuteScalar().ToString();
+
                 dataInDataGridView();
                 connect.Close();
 
-                MessageBox.Show($"{rows}筆資料新增成功");
+                int rowIndex;
+
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.Cells[0].Value.ToString().Contains(id))
+                    {
+                        rowIndex = row.Index;
+                        //dataGridView1.ClearSelection();
+                        row.Selected = true;
+                        dataGridView1.FirstDisplayedScrollingRowIndex = rowIndex;
+                        dataGridView1.Focus();
+                        break;
+                    }
+                }
             }
 
             else
@@ -146,7 +179,6 @@ namespace RecordCost
             reader.Close();
 
             idTextBox.Text = "";
-            costDateTimePicker.Value = DateTime.Now.Date;
             numberTextBox.Text = "";
             itemsTextBox.Text = "";
             countTextBox.Text = "";
@@ -172,11 +204,6 @@ namespace RecordCost
                 connect.Close();
                 MessageBox.Show($"{rows}筆資料刪除成功");
             }
-
-
-            //costBindingSource.AddNew();
-            //costDateTimePicker.Value = DateTime.Now.Date;
-            //costBindingSource.EndEdit();
         }
 
         private void SearchButton_Click(object sender, EventArgs e)
@@ -190,26 +217,30 @@ namespace RecordCost
                 string searchSQL = "select * from Cost where (items like @searchitems ) and (costDate between @startDate and @endDate);";
                 SqlCommand command = new SqlCommand(searchSQL, connect);
                 command.Parameters.AddWithValue("@searchitems", $"%{searchItems}%");
-                command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.Date);
-                command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.Date);
+                command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.ToShortDateString());
+                command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.ToShortDateString());
 
                 SqlDataReader reader = command.ExecuteReader();
-
-                int total = 0;
-
-                while (reader.Read())
-                {
-                    total += Convert.ToInt32(reader["price"]);
-                }
 
                 if (reader.HasRows)
                 {
                     DataTable dt = new DataTable();
                     dt.Load(reader);
                     dataGridView1.DataSource = dt;
+                    int total = 0;
+
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        total += (int?)dataGridView1.Rows[i].Cells[5]?.Value ?? 0;
+                    }
+
+                    totalLabel.Text = $"總花費：{total}";
                 }
 
-                totalLabel.Text = $"總花費：{total}";
+                else
+                {
+                    MessageBox.Show("查無資料");
+                }
 
                 reader.Close();
                 connect.Close();
@@ -219,10 +250,36 @@ namespace RecordCost
             {
                 connect = new SqlConnection(myCostConnectionString);
                 connect.Open();
-                string searchSQL = "select * from Cost where costDate between @startDate and @endDate;";
+                string searchSQL = $"select * from Cost where costDate between @startDate and @endDate;";
                 SqlCommand command = new SqlCommand(searchSQL, connect);
-                command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.Date);
-                command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.Date);
+                command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.ToShortDateString());
+                command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.ToShortDateString());
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    dataGridView1.DataSource = dt;
+
+                    int total = 0;
+
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        total += (int?)dataGridView1.Rows[i].Cells[5]?.Value ?? 0;
+                    }
+
+                    totalLabel.Text = $"總花費：{total}";
+                }
+
+                else
+                {
+                    MessageBox.Show("查無資料");
+                }
+
+                reader.Close();
+                connect.Close();
             }
         }
 
@@ -261,15 +318,293 @@ namespace RecordCost
             }
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void LotteryButton_Click(object sender, EventArgs e)
         {
-            if (e.RowIndex < 0)
+            if (lotteryRichTextBox.Text != "")
             {
+                string[] slice = new string[lotteryRichTextBox.Lines.Length];
+
+                for (int index = 0; index < lotteryRichTextBox.Lines.Length; index++)
+                {
+                    if (lotteryRichTextBox.Lines[index].Length >= 3 && lotteryRichTextBox.Lines[index].Length <= 8)
+                    {
+                        slice[index] = lotteryRichTextBox.Lines[index].PadLeft(8, '*').Substring(5);
+                        slice[index] = $"number like '%{slice[index]}'";
+                        continue;
+                    }
+
+                    else
+                    {
+                        MessageBox.Show("輸入錯誤");
+                        return;
+                    }
+                }
+
+                string number = string.Join(" or ", slice);
+
+                connect = new SqlConnection(myCostConnectionString);
+                connect.Open();
+                string searchSQL = "select * from Cost where (" + number + ") and (costDate between @startDate and @endDate);";
+                SqlCommand command = new SqlCommand(searchSQL, connect);
+                command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.ToShortDateString());
+                command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.ToShortDateString());
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    dataGridView1.DataSource = dt;
+
+                    int total = 0;
+
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        total += (int?)dataGridView1.Rows[i].Cells[5]?.Value ?? 0;
+                    }
+
+                    totalLabel.Text = $"總花費：{total}";
+                }
+
+                else
+                {
+                    MessageBox.Show("查無資料");
+                }
+
+                reader.Close();
+                connect.Close();
+            }
+        }
+
+        private void ThisMonthButton_Click(object sender, EventArgs e)
+        {
+            string searchItems = searchTextBox.Text;
+
+            if (searchItems != "")
+            {
+                connect = new SqlConnection(myCostConnectionString);
+                connect.Open();
+                string searchSQL = "select * from Cost where (items like @searchitems ) and (costDate like @monthDate);";
+                SqlCommand command = new SqlCommand(searchSQL, connect);
+                command.Parameters.AddWithValue("@searchitems", $"%{searchItems}%");
+                command.Parameters.AddWithValue("@monthDate", $"{DateTime.Now.ToString("yyyy-MM")}%");
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    dataGridView1.DataSource = dt;
+                    int total = 0;
+
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        total += (int?)dataGridView1.Rows[i].Cells[5]?.Value ?? 0;
+                    }
+
+                    totalLabel.Text = $"總花費：{total}";
+                }
+
+                else
+                {
+                    MessageBox.Show("查無資料");
+                }
+
+                reader.Close();
+                connect.Close();
+            }
+
+            else
+            {
+                connect = new SqlConnection(myCostConnectionString);
+                connect.Open();
+                string searchSQL = $"select * from Cost where costDate like @monthDate order by costDate;";
+                SqlCommand command = new SqlCommand(searchSQL, connect);
+                command.Parameters.AddWithValue("@monthDate", $"{DateTime.Now.ToString("yyyy-MM")}%");
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    dataGridView1.DataSource = dt;
+
+                    int total = 0;
+
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        total += (int?)dataGridView1.Rows[i].Cells[5]?.Value ?? 0;
+                    }
+
+                    totalLabel.Text = $"總花費：{total}";
+                }
+
+                else
+                {
+                    MessageBox.Show("查無資料");
+                }
+
+                reader.Close();
+                connect.Close();
+            }
+        }
+
+        private void ThisLotteryButton_Click(object sender, EventArgs e)
+        {
+            if (lotteryRichTextBox.Text != "")
+            {
+                string[] slice = new string[lotteryRichTextBox.Lines.Length];
+
+                for (int index = 0; index < lotteryRichTextBox.Lines.Length; index++)
+                {
+                    if (lotteryRichTextBox.Lines[index].Length >= 3 && lotteryRichTextBox.Lines[index].Length <= 8)
+                    {
+                        slice[index] = lotteryRichTextBox.Lines[index].PadLeft(8, '*').Substring(5);
+                        slice[index] = $"number like '%{slice[index]}'";
+                        continue;
+                    }
+
+                    else
+                    {
+                        MessageBox.Show("輸入錯誤");
+                        return;
+                    }
+                }
+
+                string number = string.Join(" or ", slice);
+
+                connect = new SqlConnection(myCostConnectionString);
+                connect.Open();
+                string searchSQL = "select * from Cost where (" + number + ") and (costDate like @startDate or costDate like @endDate);";
+                SqlCommand command = new SqlCommand(searchSQL, connect);
+
+                if (DateTime.Now.Month % 2 == 0)
+                {
+                    command.Parameters.AddWithValue("@startDate", $"{DateTime.Now.AddMonths(-3).ToString("yyyy-MM")}%");
+                    command.Parameters.AddWithValue("@endDate", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM")}%");
+                }
+
+                else
+                {
+                    command.Parameters.AddWithValue("@startDate", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM")}%");
+                    command.Parameters.AddWithValue("@endDate", $"{DateTime.Now.AddMonths(-1).ToString("yyyy-MM")}%");
+                }
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    dataGridView1.DataSource = dt;
+
+                    int total = 0;
+
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        total += (int?)dataGridView1.Rows[i].Cells[5]?.Value ?? 0;
+                    }
+
+                    totalLabel.Text = $"總花費：{total}";
+                }
+
+                else
+                {
+                    MessageBox.Show("查無資料");
+                }
+
+                reader.Close();
+                connect.Close();
+            }
+        }
+
+        private void LastLotteryButton_Click(object sender, EventArgs e)
+        {
+            if (lotteryRichTextBox.Text != "")
+            {
+                string[] slice = new string[lotteryRichTextBox.Lines.Length];
+
+                for (int index = 0; index < lotteryRichTextBox.Lines.Length; index++)
+                {
+                    if (lotteryRichTextBox.Lines[index].Length >= 3 && lotteryRichTextBox.Lines[index].Length <= 8)
+                    {
+                        slice[index] = lotteryRichTextBox.Lines[index].PadLeft(8, '*').Substring(5);
+                        slice[index] = $"number like '%{slice[index]}'";
+                        continue;
+                    }
+
+                    else
+                    {
+                        MessageBox.Show("輸入錯誤");
+                        return;
+                    }
+                }
+
+                string number = string.Join(" or ", slice);
+
+                connect = new SqlConnection(myCostConnectionString);
+                connect.Open();
+                string searchSQL = "select * from Cost where (" + number + ") and (costDate like @startDate or costDate like @endDate);";
+                SqlCommand command = new SqlCommand(searchSQL, connect);
+
+                if (DateTime.Now.Month % 2 == 0)
+                {
+                    command.Parameters.AddWithValue("@startDate", $"{DateTime.Now.AddMonths(-5).ToString("yyyy-MM")}%");
+                    command.Parameters.AddWithValue("@endDate", $"{DateTime.Now.AddMonths(-4).ToString("yyyy-MM")}%");
+                }
+
+                else
+                {
+                    command.Parameters.AddWithValue("@startDate", $"{DateTime.Now.AddMonths(-4).ToString("yyyy-MM")}%");
+                    command.Parameters.AddWithValue("@endDate", $"{DateTime.Now.AddMonths(-3).ToString("yyyy-MM")}%");
+                }
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    dataGridView1.DataSource = dt;
+
+                    int total = 0;
+
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        total += (int?)dataGridView1.Rows[i].Cells[5]?.Value ?? 0;
+                    }
+
+                    totalLabel.Text = $"總花費：{total}";
+                }
+
+                else
+                {
+                    MessageBox.Show("查無資料");
+                }
+
+                reader.Close();
+                connect.Close();
+            }
+        }
+
+        private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex == dataGridView1.Rows.Count - 1)
+            {
+                if (idTextBox.Text != "")
+                {
+                    idTextBox.Text = "";
+                    numberTextBox.Text = "";
+                    itemsTextBox.Text = "";
+                    countTextBox.Text = "";
+                    priceTextBox.Text = "";
+                }
                 return;
             }
 
-            string strselectID = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-            int intSelectID = Convert.ToInt32(strselectID);
+            int intSelectID = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
 
             connect = new SqlConnection(myCostConnectionString);
             connect.Open();
@@ -291,48 +626,6 @@ namespace RecordCost
 
             reader.Close();
             connect.Close();
-        }
-
-        private void LotteryButton_Click(object sender, EventArgs e)
-        {
-            if (lotteryRichTextBox.Text != "")
-            {
-                string[] slice = new string[lotteryRichTextBox.Lines.Length];
-
-                for (int index = 0; index < lotteryRichTextBox.Lines.Length; index++)
-                {
-                    if (lotteryRichTextBox.Lines[index].Length < 8)
-                    {
-                        slice[index] = lotteryRichTextBox.Lines[index].PadLeft(8, '*').Substring(5);
-                        slice[index] = $"number like '%{slice[index]}'";
-                        continue;
-                    }
-
-                    slice[index] = lotteryRichTextBox.Lines[index].Substring(5);
-                    slice[index] = $"number like '%{slice[index]}'";
-                }
-
-                string number = string.Join(" or ", slice);
-
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
-                string searchSQL = "select * from Cost where (@searchNumber) and (costDate between @startDate and @endDate);";
-                SqlCommand command = new SqlCommand(searchSQL, connect);
-                command.Parameters.AddWithValue("@searchNumber", number);
-                command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.Date);
-                command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.Date);
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-                    dataGridView1.DataSource = dt;
-                }
-
-                reader.Close();
-                connect.Close();
-            }
         }
     }
 }

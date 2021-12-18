@@ -59,15 +59,23 @@ namespace RecordCost
             this.totalLabel = new System.Windows.Forms.Label();
             this.lotteryRichTextBox = new System.Windows.Forms.RichTextBox();
             this.Lotterysbutton = new System.Windows.Forms.Button();
+            this.ThisMonthButton = new System.Windows.Forms.Button();
+            this.ThisLotteryButton = new System.Windows.Forms.Button();
+            this.LastLotteryButton = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lastLotteryLabel = new System.Windows.Forms.Label();
+            this.thisLotteryLabel = new System.Windows.Forms.Label();
+            this.KeepButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.costBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.button1.Location = new System.Drawing.Point(631, 332);
+            this.button1.Location = new System.Drawing.Point(351, 160);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(104, 39);
             this.button1.TabIndex = 0;
@@ -77,7 +85,7 @@ namespace RecordCost
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(631, 399);
+            this.pictureBox1.Location = new System.Drawing.Point(423, 50);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(124, 89);
             this.pictureBox1.TabIndex = 1;
@@ -87,7 +95,7 @@ namespace RecordCost
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label1.Location = new System.Drawing.Point(644, 286);
+            this.label1.Location = new System.Drawing.Point(470, 175);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 16);
             this.label1.TabIndex = 2;
@@ -154,7 +162,7 @@ namespace RecordCost
             this.itemsTextBox.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.itemsTextBox.Location = new System.Drawing.Point(149, 219);
             this.itemsTextBox.Name = "itemsTextBox";
-            this.itemsTextBox.Size = new System.Drawing.Size(472, 40);
+            this.itemsTextBox.Size = new System.Drawing.Size(458, 40);
             this.itemsTextBox.TabIndex = 9;
             // 
             // countTextBox
@@ -198,7 +206,7 @@ namespace RecordCost
             // startDateTimePicker
             // 
             this.startDateTimePicker.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.startDateTimePicker.Location = new System.Drawing.Point(802, 315);
+            this.startDateTimePicker.Location = new System.Drawing.Point(677, 315);
             this.startDateTimePicker.Name = "startDateTimePicker";
             this.startDateTimePicker.Size = new System.Drawing.Size(200, 27);
             this.startDateTimePicker.TabIndex = 14;
@@ -206,7 +214,7 @@ namespace RecordCost
             // SearchButton
             // 
             this.SearchButton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.SearchButton.Location = new System.Drawing.Point(802, 368);
+            this.SearchButton.Location = new System.Drawing.Point(677, 353);
             this.SearchButton.Name = "SearchButton";
             this.SearchButton.Size = new System.Drawing.Size(130, 39);
             this.SearchButton.TabIndex = 15;
@@ -227,17 +235,17 @@ namespace RecordCost
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(802, 28);
+            this.dataGridView1.Location = new System.Drawing.Point(608, 12);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(434, 202);
+            this.dataGridView1.Size = new System.Drawing.Size(660, 202);
             this.dataGridView1.TabIndex = 17;
-            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dataGridView1.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
             // 
             // endDateTimePicker
             // 
             this.endDateTimePicker.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.endDateTimePicker.Location = new System.Drawing.Point(1040, 315);
+            this.endDateTimePicker.Location = new System.Drawing.Point(942, 315);
             this.endDateTimePicker.Name = "endDateTimePicker";
             this.endDateTimePicker.Size = new System.Drawing.Size(200, 27);
             this.endDateTimePicker.TabIndex = 18;
@@ -246,7 +254,7 @@ namespace RecordCost
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label2.Location = new System.Drawing.Point(1008, 315);
+            this.label2.Location = new System.Drawing.Point(896, 315);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 27);
             this.label2.TabIndex = 19;
@@ -255,7 +263,7 @@ namespace RecordCost
             // searchTextBox
             // 
             this.searchTextBox.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.searchTextBox.Location = new System.Drawing.Point(916, 258);
+            this.searchTextBox.Location = new System.Drawing.Point(790, 255);
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(320, 40);
             this.searchTextBox.TabIndex = 20;
@@ -264,7 +272,7 @@ namespace RecordCost
             // 
             this.searchLabel.AutoSize = true;
             this.searchLabel.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.searchLabel.Location = new System.Drawing.Point(797, 261);
+            this.searchLabel.Location = new System.Drawing.Point(672, 258);
             this.searchLabel.Name = "searchLabel";
             this.searchLabel.Size = new System.Drawing.Size(93, 27);
             this.searchLabel.TabIndex = 21;
@@ -304,7 +312,7 @@ namespace RecordCost
             // 
             this.totalLabel.AutoSize = true;
             this.totalLabel.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.totalLabel.Location = new System.Drawing.Point(954, 374);
+            this.totalLabel.Location = new System.Drawing.Point(937, 359);
             this.totalLabel.Name = "totalLabel";
             this.totalLabel.Size = new System.Drawing.Size(120, 27);
             this.totalLabel.TabIndex = 25;
@@ -312,7 +320,7 @@ namespace RecordCost
             // 
             // lotteryRichTextBox
             // 
-            this.lotteryRichTextBox.Location = new System.Drawing.Point(1040, 415);
+            this.lotteryRichTextBox.Location = new System.Drawing.Point(910, 449);
             this.lotteryRichTextBox.Name = "lotteryRichTextBox";
             this.lotteryRichTextBox.Size = new System.Drawing.Size(126, 109);
             this.lotteryRichTextBox.TabIndex = 26;
@@ -321,19 +329,100 @@ namespace RecordCost
             // Lotterysbutton
             // 
             this.Lotterysbutton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Lotterysbutton.Location = new System.Drawing.Point(802, 449);
+            this.Lotterysbutton.Location = new System.Drawing.Point(423, 341);
             this.Lotterysbutton.Name = "Lotterysbutton";
-            this.Lotterysbutton.Size = new System.Drawing.Size(188, 39);
+            this.Lotterysbutton.Size = new System.Drawing.Size(200, 39);
             this.Lotterysbutton.TabIndex = 27;
             this.Lotterysbutton.Text = "查詢中獎號碼";
             this.Lotterysbutton.UseVisualStyleBackColor = true;
             this.Lotterysbutton.Click += new System.EventHandler(this.LotteryButton_Click);
             // 
+            // ThisMonthButton
+            // 
+            this.ThisMonthButton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ThisMonthButton.Location = new System.Drawing.Point(677, 408);
+            this.ThisMonthButton.Name = "ThisMonthButton";
+            this.ThisMonthButton.Size = new System.Drawing.Size(130, 39);
+            this.ThisMonthButton.TabIndex = 28;
+            this.ThisMonthButton.Text = "本月花費";
+            this.ThisMonthButton.UseVisualStyleBackColor = true;
+            this.ThisMonthButton.Click += new System.EventHandler(this.ThisMonthButton_Click);
+            // 
+            // ThisLotteryButton
+            // 
+            this.ThisLotteryButton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ThisLotteryButton.Location = new System.Drawing.Point(6, 61);
+            this.ThisLotteryButton.Name = "ThisLotteryButton";
+            this.ThisLotteryButton.Size = new System.Drawing.Size(88, 39);
+            this.ThisLotteryButton.TabIndex = 29;
+            this.ThisLotteryButton.Text = "這期";
+            this.ThisLotteryButton.UseVisualStyleBackColor = true;
+            this.ThisLotteryButton.Click += new System.EventHandler(this.ThisLotteryButton_Click);
+            // 
+            // LastLotteryButton
+            // 
+            this.LastLotteryButton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.LastLotteryButton.Location = new System.Drawing.Point(106, 61);
+            this.LastLotteryButton.Name = "LastLotteryButton";
+            this.LastLotteryButton.Size = new System.Drawing.Size(88, 39);
+            this.LastLotteryButton.TabIndex = 30;
+            this.LastLotteryButton.Text = "上期";
+            this.LastLotteryButton.UseVisualStyleBackColor = true;
+            this.LastLotteryButton.Click += new System.EventHandler(this.LastLotteryButton_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lastLotteryLabel);
+            this.groupBox1.Controls.Add(this.thisLotteryLabel);
+            this.groupBox1.Controls.Add(this.ThisLotteryButton);
+            this.groupBox1.Controls.Add(this.LastLotteryButton);
+            this.groupBox1.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.groupBox1.Location = new System.Drawing.Point(677, 458);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 113);
+            this.groupBox1.TabIndex = 31;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "查詢中獎號碼";
+            // 
+            // lastLotteryLabel
+            // 
+            this.lastLotteryLabel.AutoSize = true;
+            this.lastLotteryLabel.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lastLotteryLabel.Location = new System.Drawing.Point(133, 36);
+            this.lastLotteryLabel.Name = "lastLotteryLabel";
+            this.lastLotteryLabel.Size = new System.Drawing.Size(29, 16);
+            this.lastLotteryLabel.TabIndex = 33;
+            this.lastLotteryLabel.Text = "last";
+            // 
+            // thisLotteryLabel
+            // 
+            this.thisLotteryLabel.AutoSize = true;
+            this.thisLotteryLabel.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.thisLotteryLabel.Location = new System.Drawing.Point(33, 36);
+            this.thisLotteryLabel.Name = "thisLotteryLabel";
+            this.thisLotteryLabel.Size = new System.Drawing.Size(30, 16);
+            this.thisLotteryLabel.TabIndex = 32;
+            this.thisLotteryLabel.Text = "this";
+            // 
+            // KeepButton
+            // 
+            this.KeepButton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.KeepButton.Location = new System.Drawing.Point(42, 509);
+            this.KeepButton.Name = "KeepButton";
+            this.KeepButton.Size = new System.Drawing.Size(130, 39);
+            this.KeepButton.TabIndex = 32;
+            this.KeepButton.Text = "儲存資料";
+            this.KeepButton.UseVisualStyleBackColor = true;
+            this.KeepButton.Click += new System.EventHandler(this.KeepButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1277, 522);
+            this.ClientSize = new System.Drawing.Size(1282, 583);
+            this.Controls.Add(this.KeepButton);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.ThisMonthButton);
             this.Controls.Add(this.Lotterysbutton);
             this.Controls.Add(this.lotteryRichTextBox);
             this.Controls.Add(this.totalLabel);
@@ -368,6 +457,8 @@ namespace RecordCost
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.costBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -404,6 +495,13 @@ namespace RecordCost
         private System.Windows.Forms.Label totalLabel;
         private System.Windows.Forms.RichTextBox lotteryRichTextBox;
         private System.Windows.Forms.Button Lotterysbutton;
+        private System.Windows.Forms.Button ThisMonthButton;
+        private System.Windows.Forms.Button ThisLotteryButton;
+        private System.Windows.Forms.Button LastLotteryButton;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label thisLotteryLabel;
+        private System.Windows.Forms.Label lastLotteryLabel;
+        private System.Windows.Forms.Button KeepButton;
     }
 }
 
