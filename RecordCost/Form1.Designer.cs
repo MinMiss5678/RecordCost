@@ -163,9 +163,9 @@ namespace RecordCost
             this.DeleteButton.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.DeleteButton.Location = new System.Drawing.Point(373, 449);
             this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.Size = new System.Drawing.Size(130, 39);
+            this.DeleteButton.Size = new System.Drawing.Size(216, 39);
             this.DeleteButton.TabIndex = 13;
-            this.DeleteButton.Text = "刪除資料";
+            this.DeleteButton.Text = "刪除資料 (delete)";
             this.DeleteButton.UseVisualStyleBackColor = true;
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
@@ -200,7 +200,6 @@ namespace RecordCost
             // 
             // dataGridView1
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(624, 12);
             this.dataGridView1.Name = "dataGridView1";
@@ -287,11 +286,12 @@ namespace RecordCost
             // 
             // lotteryRichTextBox
             // 
-            this.lotteryRichTextBox.Location = new System.Drawing.Point(920, 458);
+            this.lotteryRichTextBox.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lotteryRichTextBox.Location = new System.Drawing.Point(920, 431);
             this.lotteryRichTextBox.Name = "lotteryRichTextBox";
-            this.lotteryRichTextBox.Size = new System.Drawing.Size(126, 109);
+            this.lotteryRichTextBox.Size = new System.Drawing.Size(126, 136);
             this.lotteryRichTextBox.TabIndex = 26;
-            this.lotteryRichTextBox.Text = "777\n788";
+            this.lotteryRichTextBox.Text = "";
             // 
             // ThisMonthButton
             // 
@@ -403,9 +403,11 @@ namespace RecordCost
             this.Controls.Add(this.ItemsLabel);
             this.Controls.Add(this.NumberLabel);
             this.Controls.Add(this.costDateTimePicker);
+            this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.costBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);

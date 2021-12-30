@@ -128,6 +128,13 @@ namespace RecordCost
 
             if (id > 0)
             {
+                int deleteindex = (dataGridView1.SelectedCells[0].RowIndex - 1);
+
+                if (deleteindex < 0)
+                {
+                    deleteindex = 0;
+                }
+
                 connect = new SqlConnection(myCostConnectionString);
                 connect.Open();
                 string delSQL = "delete from Cost where id = @searchID;";
@@ -138,6 +145,17 @@ namespace RecordCost
 
                 dataInDataGridView();
                 connect.Close();
+
+                try
+                {
+                    DataGridViewRow lastrow = dataGridView1.Rows[deleteindex];
+                    lastrow.Selected = true;
+                    dataGridView1.FirstDisplayedScrollingRowIndex = lastrow.Index;
+                    dataGridView1.Focus();
+                    dataGridView1_RowEnter(this, new DataGridViewCellEventArgs(0, deleteindex));
+                }
+                catch { }
+
                 MessageBox.Show($"{rows}筆資料刪除成功");
             }
         }
@@ -150,7 +168,9 @@ namespace RecordCost
             {
                 connect = new SqlConnection(myCostConnectionString);
                 connect.Open();
-                string searchSQL = "select * from Cost where (items like @searchitems ) and (costDate between @startDate and @endDate);";
+                string searchSQL = "select * from Cost where (items like @searchitems) and (costDate between @startDate and @endDate) " +
+                    "order by costDate;";
+
                 SqlCommand command = new SqlCommand(searchSQL, connect);
                 command.Parameters.AddWithValue("@searchitems", $"%{searchItems}%");
                 command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.ToShortDateString());
@@ -164,7 +184,8 @@ namespace RecordCost
             {
                 connect = new SqlConnection(myCostConnectionString);
                 connect.Open();
-                string searchSQL = $"select * from Cost where costDate between @startDate and @endDate;";
+                string searchSQL = "select * from Cost where costDate between @startDate and @endDate order by costDate;";
+
                 SqlCommand command = new SqlCommand(searchSQL, connect);
                 command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.ToShortDateString());
                 command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.ToShortDateString());
@@ -182,7 +203,8 @@ namespace RecordCost
             {
                 connect = new SqlConnection(myCostConnectionString);
                 connect.Open();
-                string searchSQL = "select * from Cost where (items like @searchitems ) and (costDate like @monthDate);";
+                string searchSQL = "select * from Cost where (items like @searchitems) and (costDate like @monthDate) order by costDate";
+
                 SqlCommand command = new SqlCommand(searchSQL, connect);
                 command.Parameters.AddWithValue("@searchitems", $"%{searchItems}%");
                 command.Parameters.AddWithValue("@monthDate", $"{DateTime.Now.ToString("yyyy-MM")}%");
@@ -304,12 +326,9 @@ namespace RecordCost
             SqlCommand command = new SqlCommand(dataSQL, connect);
             SqlDataReader reader = command.ExecuteReader();
 
-            if (reader.HasRows)
-            {
-                DataTable dt = new DataTable();
-                dt.Load(reader);
-                dataGridView1.DataSource = dt;
-            }
+            DataTable dt = new DataTable();
+            dt.Load(reader);
+            dataGridView1.DataSource = dt;
 
             reader.Close();
 
@@ -318,6 +337,7 @@ namespace RecordCost
             itemsTextBox.Text = "";
             countTextBox.Text = "";
             priceTextBox.Text = "";
+            //EmptyButton.PerformClick();
         }
 
         private void JumpRowFromID(string id)
@@ -364,12 +384,22 @@ namespace RecordCost
         private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             var temp = dataGridView1.Rows[e.RowIndex].Cells;//觸發事件的那筆資料
+
             idTextBox.Text = $"{temp[0].Value}";
             costDateTimePicker.Value = Convert.ToDateTime(temp[1].Value);
             numberTextBox.Text = $"{temp[2].Value}";
             itemsTextBox.Text = $"{temp[3].Value}";
             countTextBox.Text = $"{temp[4].Value}";
             priceTextBox.Text = $"{temp[5].Value}";
+
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DeleteButton.PerformClick(); //執行單擊DeleteButton的動作      
+            }
         }
     }
 }
