@@ -24,7 +24,7 @@ namespace RecordCost
         public Form1()
         {
             InitializeComponent();
-            this.pictureBox1.Image = Image.FromFile(@"C:\Users\jerem\Downloads\qrcode_dotblogs.com.tw.png");
+            //this.pictureBox1.Image = Image.FromFile(@"C:\Users\jerem\Downloads\qrcode_dotblogs.com.tw.png");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -52,63 +52,63 @@ namespace RecordCost
             costDateTimePicker.Value = DateTime.Now;
         }
 
-        private string imagePath = "";
+        //private string imagePath = "";
 
 
-        private Bitmap GetQRCodeByZXingNet(String strMessage, Int32 width, Int32 height)
-        {
-            Bitmap result = null;
-            try
-            {
-                BarcodeWriter barCodeWriter = new BarcodeWriter();
-                barCodeWriter.Format = BarcodeFormat.QR_CODE; //barcode格式
-                barCodeWriter.Options.Hints.Add(EncodeHintType.CHARACTER_SET, "UTF-8");  //編碼字元utf-8
-                barCodeWriter.Options.Hints.Add(EncodeHintType.ERROR_CORRECTION, ZXing.QrCode.Internal.ErrorCorrectionLevel.H); //錯誤校正等級
-                barCodeWriter.Options.Height = height; //高度
-                barCodeWriter.Options.Width = width; //寬度
-                barCodeWriter.Options.Margin = 0; //外邊距
-                ZXing.Common.BitMatrix bm = barCodeWriter.Encode(strMessage); //將訊息寫入
-                result = barCodeWriter.Write(bm);
+        //private Bitmap GetQRCodeByZXingNet(String strMessage, Int32 width, Int32 height)
+        //{
+        //    Bitmap result = null;
+        //    try
+        //    {
+        //        BarcodeWriter barCodeWriter = new BarcodeWriter();
+        //        barCodeWriter.Format = BarcodeFormat.QR_CODE; //barcode格式
+        //        barCodeWriter.Options.Hints.Add(EncodeHintType.CHARACTER_SET, "UTF-8");  //編碼字元utf-8
+        //        barCodeWriter.Options.Hints.Add(EncodeHintType.ERROR_CORRECTION, ZXing.QrCode.Internal.ErrorCorrectionLevel.H); //錯誤校正等級
+        //        barCodeWriter.Options.Height = height; //高度
+        //        barCodeWriter.Options.Width = width; //寬度
+        //        barCodeWriter.Options.Margin = 0; //外邊距
+        //        ZXing.Common.BitMatrix bm = barCodeWriter.Encode(strMessage); //將訊息寫入
+        //        result = barCodeWriter.Write(bm);
 
-                Bitmap overlay = new Bitmap(imagePath); //載入圖片
+        //        Bitmap overlay = new Bitmap(imagePath); //載入圖片
 
-                int deltaHeigth = result.Height - overlay.Height; //圖片y
-                int deltaWidth = result.Width - overlay.Width; //圖片x
+        //        int deltaHeigth = result.Height - overlay.Height; //圖片y
+        //        int deltaWidth = result.Width - overlay.Width; //圖片x
 
-                Graphics g = Graphics.FromImage(result); //圖型
-                g.DrawImage(overlay, new Point(deltaWidth / 2, deltaHeigth / 2)); //畫出圖片
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-            return result;
-
-
-        }
+        //        Graphics g = Graphics.FromImage(result); //圖型
+        //        g.DrawImage(overlay, new Point(deltaWidth / 2, deltaHeigth / 2)); //畫出圖片
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString());
+        //    }
+        //    return result;
 
 
+        //}
 
-        /// <summary>
-        /// 生成二維碼圖片
-        /// </summary>
-        /// <param name="strMessage">要生成二維碼的字元串</param>
-        /// <param name="width">二維碼圖片寬度</param>
-        /// <param name="height">二維碼圖片高度</param>
-        /// <returns></returns>
 
-        private string DecodeQrCode(Bitmap barcodeBitmap)
-        {
-            BarcodeReader reader = new BarcodeReader();
-            reader.Options.CharacterSet = "UTF-8";
-            var result = reader.Decode(barcodeBitmap);
-            return (result == null) ? null : result.Text;
-        }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            this.label1.Text = DecodeQrCode((Bitmap)this.pictureBox1.Image);
-        }
+        ///// <summary>
+        ///// 生成二維碼圖片
+        ///// </summary>
+        ///// <param name="strMessage">要生成二維碼的字元串</param>
+        ///// <param name="width">二維碼圖片寬度</param>
+        ///// <param name="height">二維碼圖片高度</param>
+        ///// <returns></returns>
+
+        //private string DecodeQrCode(Bitmap barcodeBitmap)
+        //{
+        //    BarcodeReader reader = new BarcodeReader();
+        //    reader.Options.CharacterSet = "UTF-8";
+        //    var result = reader.Decode(barcodeBitmap);
+        //    return (result == null) ? null : result.Text;
+        //}
+
+        //private void button1_Click_1(object sender, EventArgs e)
+        //{
+        //    this.label1.Text = DecodeQrCode((Bitmap)this.pictureBox1.Image);
+        //}
 
         private void NewButton_Click(object sender, EventArgs e)
         {
