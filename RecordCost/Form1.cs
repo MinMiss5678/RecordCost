@@ -13,7 +13,6 @@ namespace RecordCost
 {
     public partial class Form1 : Form
     {
-        SqlConnectionStringBuilder scsb;
         string myCostConnectionString = "";
         SqlConnection connect;
         public Form1()
@@ -23,13 +22,12 @@ namespace RecordCost
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            scsb = new SqlConnectionStringBuilder();//建立資料庫連線
+            SqlConnectionStringBuilder scsb = new SqlConnectionStringBuilder();//建立資料庫連線
             scsb.DataSource = @".";
             scsb.InitialCatalog = "myCost";
             scsb.IntegratedSecurity = true;
             myCostConnectionString = scsb.ToString();
-            connect = new SqlConnection(myCostConnectionString);
-            connect.Open();
+
             dataInDataGridView();
             connect.Close();
 
@@ -61,10 +59,8 @@ namespace RecordCost
         {
             if (numberTextBox.Text != "" || itemsTextBox.Text != "")
             {
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
                 string newSQL = "insert into Cost output inserted.id values (@newDate, @newNumber, @newItems, @newCount, @newPrice);";
-                SqlCommand command = new SqlCommand(newSQL, connect);
+                SqlCommand command = methodSQL(newSQL);
                 command.Parameters.AddWithValue("@newDate", costDateTimePicker.Value);
                 command.Parameters.AddWithValue("@newNumber", numberTextBox.Text);
                 command.Parameters.AddWithValue("@newItems", itemsTextBox.Text);
@@ -94,12 +90,10 @@ namespace RecordCost
             {
                 if (numberTextBox.Text != "" || itemsTextBox.Text != "")
                 {
-                    connect = new SqlConnection(myCostConnectionString);
-                    connect.Open();
                     string updateSQL = "update Cost set costDate = @newDate, number = @newNumber, items = @newItems, " +
                         "count = @newCount, price = @newPrice where id = @searchID;";
 
-                    SqlCommand command = new SqlCommand(updateSQL, connect);
+                    SqlCommand command = methodSQL(updateSQL);
                     command.Parameters.AddWithValue("@searchID", id);
                     command.Parameters.AddWithValue("@newDate", costDateTimePicker.Value);
                     command.Parameters.AddWithValue("@newNumber", numberTextBox.Text);
@@ -134,11 +128,8 @@ namespace RecordCost
                 {
                     deleteindex = 0;
                 }
-
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
                 string delSQL = "delete from Cost where id = @searchID;";
-                SqlCommand command = new SqlCommand(delSQL, connect);
+                SqlCommand command = methodSQL(delSQL);
                 command.Parameters.AddWithValue("@searchID", id);
 
                 int rows = command.ExecuteNonQuery();
@@ -166,12 +157,10 @@ namespace RecordCost
 
             if (searchItems != "")
             {
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
                 string searchSQL = "select * from Cost where (items like @searchitems) and (costDate between @startDate and @endDate) " +
                     "order by costDate;";
 
-                SqlCommand command = new SqlCommand(searchSQL, connect);
+                SqlCommand command = methodSQL(searchSQL);
                 command.Parameters.AddWithValue("@searchitems", $"%{searchItems}%");
                 command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.ToShortDateString());
                 command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.ToShortDateString());
@@ -182,11 +171,9 @@ namespace RecordCost
 
             else
             {
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
                 string searchSQL = "select * from Cost where costDate between @startDate and @endDate order by costDate;";
 
-                SqlCommand command = new SqlCommand(searchSQL, connect);
+                SqlCommand command = methodSQL(searchSQL);
                 command.Parameters.AddWithValue("@startDate", startDateTimePicker.Value.ToShortDateString());
                 command.Parameters.AddWithValue("@endDate", endDateTimePicker.Value.ToShortDateString());
 
@@ -201,11 +188,9 @@ namespace RecordCost
 
             if (searchItems != "")
             {
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
                 string searchSQL = "select * from Cost where (items like @searchitems) and (costDate like @monthDate) order by costDate";
 
-                SqlCommand command = new SqlCommand(searchSQL, connect);
+                SqlCommand command = methodSQL(searchSQL);
                 command.Parameters.AddWithValue("@searchitems", $"%{searchItems}%");
                 command.Parameters.AddWithValue("@monthDate", $"{DateTime.Now.ToString("yyyy-MM")}%");
 
@@ -215,10 +200,8 @@ namespace RecordCost
 
             else
             {
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
                 string searchSQL = $"select * from Cost where costDate like @monthDate order by costDate;";
-                SqlCommand command = new SqlCommand(searchSQL, connect);
+                SqlCommand command = methodSQL(searchSQL);
                 command.Parameters.AddWithValue("@monthDate", $"{DateTime.Now.ToString("yyyy-MM")}%");
 
                 TotalCost(command.ExecuteReader());
@@ -250,11 +233,9 @@ namespace RecordCost
 
                 string number = string.Join(" or ", slice);
 
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
                 string searchSQL = "select * from Cost where (" + number + ") and (costDate like @startDate or costDate like @endDate) " +
                                    "order by costDate;";
-                SqlCommand command = new SqlCommand(searchSQL, connect);
+                SqlCommand command = methodSQL(searchSQL);
 
                 if (DateTime.Now.Month % 2 == 0)//設定月份
                 {
@@ -297,11 +278,9 @@ namespace RecordCost
 
                 string number = string.Join(" or ", slice);
 
-                connect = new SqlConnection(myCostConnectionString);
-                connect.Open();
                 string searchSQL = "select * from Cost where (" + number + ") and (costDate like @startDate or costDate like @endDate) " +
                     "order by costDate;";
-                SqlCommand command = new SqlCommand(searchSQL, connect);
+                SqlCommand command = methodSQL(searchSQL);
 
                 if (DateTime.Now.Month % 2 == 0)//設定月份
                 {
@@ -323,7 +302,7 @@ namespace RecordCost
         private void dataInDataGridView()
         {
             string dataSQL = "select * from Cost order by costDate;";
-            SqlCommand command = new SqlCommand(dataSQL, connect);
+            SqlCommand command = methodSQL(dataSQL);
             SqlDataReader reader = command.ExecuteReader();
 
             DataTable dt = new DataTable();
@@ -385,6 +364,11 @@ namespace RecordCost
         {
             var temp = dataGridView1.Rows[e.RowIndex].Cells;//觸發事件的那筆資料
 
+            if ($"{temp[0].Value}" == "")
+            {
+                return;
+            }
+
             idTextBox.Text = $"{temp[0].Value}";
             costDateTimePicker.Value = Convert.ToDateTime(temp[1].Value);
             numberTextBox.Text = $"{temp[2].Value}";
@@ -394,12 +378,19 @@ namespace RecordCost
 
         }
 
+        private SqlCommand methodSQL(string strSQL)
+        {
+            connect = new SqlConnection(myCostConnectionString);
+            connect.Open();
+            return new SqlCommand(strSQL, connect);
+        }
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
-            {
-                DeleteButton.PerformClick(); //執行單擊DeleteButton的動作      
-            }
+            //if (e. )
+            //{
+            //    DeleteButton.PerformClick(); //執行單擊DeleteButton的動作    
+            //}
         }
     }
 }
