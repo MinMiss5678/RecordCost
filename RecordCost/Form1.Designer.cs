@@ -62,6 +62,7 @@ namespace RecordCost
             this.lastLotteryLabel = new System.Windows.Forms.Label();
             this.thisLotteryLabel = new System.Windows.Forms.Label();
             this.NewButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.costBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -287,9 +288,9 @@ namespace RecordCost
             // lotteryRichTextBox
             // 
             this.lotteryRichTextBox.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lotteryRichTextBox.Location = new System.Drawing.Point(920, 431);
+            this.lotteryRichTextBox.Location = new System.Drawing.Point(942, 449);
             this.lotteryRichTextBox.Name = "lotteryRichTextBox";
-            this.lotteryRichTextBox.Size = new System.Drawing.Size(126, 136);
+            this.lotteryRichTextBox.Size = new System.Drawing.Size(126, 118);
             this.lotteryRichTextBox.TabIndex = 26;
             this.lotteryRichTextBox.Text = "";
             // 
@@ -371,11 +372,22 @@ namespace RecordCost
             this.NewButton.UseVisualStyleBackColor = true;
             this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label1.Location = new System.Drawing.Point(937, 408);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(271, 27);
+            this.label1.TabIndex = 33;
+            this.label1.Text = "請輸入號碼(不含英文)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1282, 583);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.NewButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ThisMonthButton);
@@ -449,6 +461,7 @@ namespace RecordCost
         private System.Windows.Forms.Label thisLotteryLabel;
         private System.Windows.Forms.Label lastLotteryLabel;
         private System.Windows.Forms.Button NewButton;
+        private System.Windows.Forms.Label label1;
     }
 }
 
